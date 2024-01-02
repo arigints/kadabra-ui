@@ -1,0 +1,31 @@
+image:
+  repository: registry.gitlab.com/idnic/kadabra-stats-ui/ui
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+containerPort:
+  http:
+    port: 80
+
+livenessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+  port: 80
+  healthCheckPath: "/healthz"
+
+readinessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+  port: 80
+  healthCheckPath: "/healthz"
+
+service:
+  type: ClusterIP
+  port: 80

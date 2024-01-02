@@ -1,0 +1,38 @@
+stages:
+- build
+- deploy
+
+include:
+  - project: 'idnic/k8s'
+    ref: master
+    file: '/shared/pipelines/deploy.gitlab-ci.yml'
+
+variables:
+  IMAGE_REPOSITORY: "${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}"
+
+build:ui:
+  stage: build
+  variables:
+    APP_NAME: ui
+  extends:
+  - .build
+
+deploy:ui:development:
+  stage: deploy
+  variables:
+    APP_NAME: ui
+  extends:
+  - .kadabra-cd-development
+  environment:
+    name: Development
+    url: "http://stats.dev.kadabra.id"
+
+deploy:ui:production:
+  stage: deploy
+  variables:
+    APP_NAME: ui
+  extends:
+  - .kadabra-cd-production
+  environment:
+    name: Production
+    url: "http://stats.kadabra.id"

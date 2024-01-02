@@ -1,0 +1,45 @@
+replicaCount: 5
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-wildcard
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+  tls:
+    enabled: true
+    secretName: kadabra-id-tls
+
+updateStrategy: {}
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+env:
+- name: APP_NAME
+  value: kadabra-ris-ui
+- name: APP_ENV
+  value: prod
+- name: APP_KEY
+  value: base64:NVnUlTzl2JElzuvYKitXhInaiEfEywvFDfbgiViw3bU=
+- name: APP_URL
+  value: https://stats.kadabra.id
+- name: APP_DEBUG
+  value: "false"
+- name: API_RIS_URL
+  value: "https://api.kadabra.id"
+- name: API_STATS_URL
+  value: "https://stats-api.kadabra.id"
+
+envFrom:
+- secretRef:
+    name: kadabra-stats-ui-basicauth
